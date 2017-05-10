@@ -1,0 +1,155 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-ui.js'%}"></script>
+    <link href="{% static 'css/bootstrap-combined.min.css' %}" rel="stylesheet" media="screen">
+    <link href="{% static 'css/study.css' %}" rel="stylesheet" media="screen" >
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+</head>
+<body>
+    <div>
+        <input type="text" id="order_num" name="order_num">
+        <button id="ask_new_info">询问</button></br>
+        </br>
+        <label>条形码：</label></br>
+        <input type="text" id="dis_barcode">
+        </br>
+        <label>价格：</label></br>
+        <input type="text" id="price" name="price">
+        </br></br>
+        <label>商品名字：</label></br>
+        <input id="product_name" type="text">
+        <button id="send_price">提交价格</button>
+    </div>
+    <div>
+        {% block disinfo %}
+            {% include "disinfo.html" %}
+        {% endblock %}
+    </div>
+</body>
+<script type="text/javascript">
+$(function() {
+    var order_num,price,name,barcode
+    function do_ajax(){
+         $.ajax({
+             url:'/ask_new_info/',
+             data: {"order_num":order_num,},
+             dataType:"json",
+             success:function (data,statusText,xmlHttpRequest){
+                 console.log(data);
+                 $("#row").empty();
+                 var tal=0.0
+                 $.each(data,function(key,obj){
+                     tal = tal + obj.price*obj.num;
+
+                     if (key %2 == 0){
+
+                         $("#row").append('<tr class="success">\
+                                            <td>'+obj.id+'</td>\
+                                            <td>'+obj.barcode+'</td>\
+                                            <td>'+obj.product_name+'</td>\
+                                            <td>'+obj.price+'</td>\
+                                            <td>'+obj.num+'</td>\
+                                            <td>'+(obj.price*obj.num)+'</td>\
+                                           </tr>');
+                         }
+                     else{
+
+                         $("#row").append('<tr class="warning">\
+                                            <td>'+obj.id+'</td>\
+                                            <td>'+obj.barcode+'</td>\
+                                            <td>'+obj.product_name+'</td>\
+                                            <td>'+obj.price+'</td>\
+                                            <td>'+obj.num+'</td>\
+                                            <td>'+(obj.price*obj.num)+'</td>\
+                                           </tr>');
+                         };
+
+                 })
+                 //合计
+                 $("#row").append('<tr class="warning">\
+                                            <td>'+'</td>\
+                                            <td>'+'</td>\
+                                            <td>'+'</td>\
+                                            <td>'+'</td>\
+                                            <td>总计</td>\
+                                            <td>'+tal.toFixed(2)+'</td>\
+                                           </tr>');
+             }
+
+         });
+     };
+    $("#ask_new_info").click(function(){
+        order_num=$("#order_num").val();
+        do_ajax();
+    });
+
+    function send_ajax(){
+         $.ajax({
+             url:'/add_info/',
+             data: {"price":price,
+                    "product_name":name,
+                    "barcode":barcode,
+                    "order_num":order_num,
+                    },
+             dataType:"json",
+             success:function (data,statusText,xmlHttpRequest){
+                 $("#row").empty();
+                 var tal = 0.0
+                 $.each(data,function(key,obj){
+                     tal = tal + obj.price*obj.num;
+
+                     if (key %2 == 0){
+
+                         $("#row").append('<tr class="success">\
+                                            <td>'+obj.id+'</td>\
+                                            <td>'+obj.barcode+'</td>\
+                                            <td>'+obj.product_name+'</td>\
+                                            <td>'+obj.price+'</td>\
+                                            <td>'+obj.num+'</td>\
+                                            <td>'+(obj.price*obj.num)+'</td>\
+                                           </tr>');
+                         }
+                     else{
+
+                         $("#row").append('<tr class="warning">\
+                                            <td>'+obj.id+'</td>\
+                                            <td>'+obj.barcode+'</td>\
+                                            <td>'+obj.product_name+'</td>\
+                                            <td>'+obj.price+'</td>\
+                                            <td>'+obj.num+'</td>\
+                                            <td>'+(obj.price*obj.num)+'</td>\
+                                           </tr>');
+                         };
+
+                 })
+                 //合计
+                 $("#row").append('<tr class="warning">\
+                                            <td>'+'</td>\
+                                            <td>'+'</td>\
+                                            <td>'+'</td>\
+                                            <td>'+'</td>\
+                                            <td>总计</td>\
+                                            <td>'+tal.toFixed(2)+'</td>\
+                                           </tr>');
+
+             }
+
+         });
+     };
+
+    $("#send_price").click(function(){
+        price=$("#price").val();
+        name = $("#product_name").val();
+        order_num=$("#order_num").val();
+        //barcode = $("#dis_price").text();
+        barcode = $("#dis_barcode").val();
+        send_ajax();
+    });
+})
+</script>
+</html>

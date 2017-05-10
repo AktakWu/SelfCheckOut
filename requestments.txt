@@ -1,0 +1,9 @@
+coverage==4.3.1
+Django==1.10.4
+djangorestframework==3.5.3
+djet==0.2.1
+djoser==0.5.2
+freeze==1.0.10
+Pillow==3.4.2
+PyMySQL==0.7.9
+six==1.10.0

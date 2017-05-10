@@ -1,0 +1,27 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="{% static 'css/test.css' %}">
+</head>
+<body>
+    <div style="float: right" >
+        <label>您好！{% if username %}{{ username}}欢迎您{% else %}<a href="{% url 'login' %}">请登录</a>{% endif %}</label>
+        <a href="{% url 'logout' %}"><button>退出</button></a>
+    </div>
+    <div>
+        <tr>
+            <th scope="row">1</th>
+            <td>看看</td>
+            <td>试试</td>
+
+        </tr>
+
+        <form>
+            <input type="text" name="test1">
+        </form>
+    </div>
+</body>
+</html>

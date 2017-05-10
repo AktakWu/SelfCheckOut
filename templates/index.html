@@ -1,0 +1,201 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery-ui.js'%}"></script>
+<link href="{% static 'css/bootstrap-combined.min.css' %}" rel="stylesheet" media="screen">
+<link href="{% static 'css/study.css' %}" rel="stylesheet" media="screen" >
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+</head>
+<body>
+<div id="LG" class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="page-header">
+				<h1>
+					欢乐畅购物－XXX超市
+				</h1>
+			</div>
+			<grammarly>
+				<div class="_9b5ef6-textarea_btn _9b5ef6-not_focused">
+					<div class="_9b5ef6-transform_wrap">
+						<div class="_9b5ef6-status">
+						</div>
+					</div>
+				</div>
+			</grammarly>
+			<grammarly>
+				<div class="_9b5ef6-textarea_btn _9b5ef6-not_focused">
+					<div class="_9b5ef6-transform_wrap">
+						<div class="_9b5ef6-status">
+						</div>
+					</div>
+				</div>
+			</grammarly>
+			<grammarly>
+				<div class="_9b5ef6-textarea_btn _9b5ef6-not_focused">
+					<div class="_9b5ef6-transform_wrap">
+						<div class="_9b5ef6-status">
+						</div>
+					</div>
+				</div>
+			</grammarly>
+			
+			<div class="row-fluid">
+				<div class="span12">
+                    <div class="sub_l">
+                            <input type="text" name="barcode" value=" " id="barcode">
+                            <button class="ok" id="ok">确认</button>
+
+                    </div>
+
+                    <div class="logout_r">
+                            <a href="{% url 'logout' %}">退出</a>
+                        </div>
+					<div class="login_r" >
+                        <label>您好！{% if username %}{{ username}}欢迎您{% else %}<a href="{% url 'login' %}">请登录</a>{% endif %}</label>
+
+                    </div>
+
+
+				</div>
+
+                <div class="order_NUM">
+                    <label>订单号：</label><input type="text" name="order_num" id="order_num">
+                    <label>商家ID：</label><input type="text" name="Merchant" id="Merchant">
+                    <label>数量：</label><input type="text" name="count" id="count">
+                    <div id="finished">
+                            <button class="complete" id="complete">完成订单</button>
+                     </div>
+                </div>
+
+			</div>
+			{% block disinfo %}
+                {% include "disinfo.html" %}
+            {% endblock %}
+			<grammarly>
+				<div class="_9b5ef6-textarea_btn _9b5ef6-not_focused">
+					<div class="_9b5ef6-transform_wrap">
+						<div class="_9b5ef6-status">
+						</div>
+					</div>
+				</div>
+			</grammarly>
+			<grammarly>
+				<div class="_9b5ef6-textarea_btn _9b5ef6-not_focused">
+					<div class="_9b5ef6-transform_wrap">
+						<div class="_9b5ef6-status">
+						</div>
+					</div>
+				</div>
+			</grammarly>
+			<grammarly>
+				<div class="_9b5ef6-textarea_btn _9b5ef6-not_focused">
+					<div class="_9b5ef6-transform_wrap">
+						<div class="_9b5ef6-status">
+						</div>
+					</div>
+				</div>
+			</grammarly>
+			<grammarly>
+				<div class="_9b5ef6-textarea_btn _9b5ef6-not_focused">
+					<div class="_9b5ef6-transform_wrap">
+						<div class="_9b5ef6-status">
+						</div>
+					</div>
+				</div>
+			</grammarly>
+			
+			<div class="_9b5ef6-textarea_btn _9b5ef6-not_focused">
+				<div class="_9b5ef6-transform_wrap">
+					<div class="_9b5ef6-status">
+					</div>
+				</div>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+</body>
+<script type="text/javascript">
+$(function() {
+    var barcode, Merchant,order_num,num,tal,order_status
+    function do_ajax(){
+
+         $.ajax({
+             url:'/add_product/',
+             data: {"barcode":barcode,"merchant":Merchant,"order_num":order_num,"num":num,"order_status":order_status},
+             dataType:"json",
+             success:function (data,statusText,xmlHttpRequest){
+                 $("#row").empty();
+                 var tal=0.0
+                 $.each(data,function(key,obj){
+                     //alert(key);
+                     //alert(obj.price);
+                     tal = tal + obj.price*obj.num;
+                     if(key %2 == 0){
+
+                         $("#row").append('<tr class="success">\
+                                            <td>'+obj.id+'</td>\
+                                            <td>'+obj.barcode+'</td>\
+                                            <td>'+obj.product_name+'</td>\
+                                            <td>'+obj.price+'</td>\
+                                            <td>'+obj.num+'</td>\
+                                            <td>'+(obj.price*obj.num)+'</td>\
+                                           </tr>');
+                         }
+                     else{
+
+                         $("#row").append('<tr class="warning">\
+                                            <td>'+obj.id+'</td>\
+                                            <td>'+obj.barcode+'</td>\
+                                            <td>'+obj.product_name+'</td>\
+                                            <td>'+obj.price+'</td>\
+                                            <td>'+obj.num+'</td>\
+                                            <td>'+(obj.price*obj.num)+'</td>\
+                                           </tr>');
+                         };
+
+                 })
+                 //合计
+                 $("#row").append('<tr class="warning">\
+                                            <td>'+'</td>\
+                                            <td>'+'</td>\
+                                            <td>'+'</td>\
+                                            <td>'+'</td>\
+                                            <td>总计</td>\
+                                            <td>'+tal.toFixed(2)+'</td>\
+                                           </tr>');
+
+
+             order_status = '';
+             order_num=0;
+             barcode = 0
+             num = 0
+             Merchant = ''
+             }
+
+         })
+    }
+    $("#ok").click(function(){
+        barcode=$("#barcode").val();
+        Merchant=$("#Merchant").val();
+        order_num=$("#order_num").val();
+        num = $("#count").val();
+        alert(barcode);
+        do_ajax();
+    });
+
+    $("#complete").click(function(){
+        order_status = 'FD';
+
+        Merchant=$("#Merchant").val();
+        order_num=$("#order_num").val();
+        num = $("#count").val();
+        do_ajax();
+    })
+})
+</script>
+</html>

@@ -1,0 +1,40 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="{% url 'regist' %}" method="post">
+                {% csrf_token %}
+				<ul type="">
+					<h2>New Account:</h2>
+					<li>
+                        <label>用户名：</label>
+						{{ userform.username }}
+						<div class=""> </div>
+					</li>
+					<li>
+                        <label>注册邮箱：</label>
+						{{ userform.email }}
+						<div class=""> </div>
+					</li>
+					<li>
+                        <label>用户类型：</label>
+						{{ userform.user_category }}
+						<div class=""> </div>
+					</li>
+					<li>
+                        <label>密码：</label>
+                        {{ userform.password }}
+						<div class=""> </div>
+					</li>
+                    <input type="hidden" name="source_url" value="{{ request.META.HTTP_REFERER }}">
+					<input type="submit" value="Create And Login">
+					<div class="clear"> </div>
+				</ul>
+				<div class="clear"> </div>
+			</form>
+</body>
+</html>

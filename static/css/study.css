@@ -1,0 +1,23 @@
+
+.login_r{ float: right;
+         width: 160px;
+}
+.logout_r{
+    float: right;
+    width: 30px;
+    margin:0 40px 0 0;
+}
+.sub_l{
+    float: left;
+    width: auto;
+
+}
+.order_NUM{
+    width: 100%;
+}
+#finished{
+    float: right;
+    width: 50px;
+    height: 30px;
+    margin: 0 30px;
+}
